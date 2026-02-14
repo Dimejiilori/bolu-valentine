@@ -1,5 +1,11 @@
-
 const bgContainer = document.getElementById('bg-container');
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const mainGif = document.getElementById('mainGif');
+const successScreen = document.getElementById('successScreen');
+const gifArea = document.querySelector('.gif-area');
+const modeSelect = document.getElementById('modeSelect');
+
 function createHeart() {
     const heart = document.createElement('div');
     heart.classList.add('bg-heart');
@@ -10,109 +16,91 @@ function createHeart() {
     bgContainer.appendChild(heart);
     setTimeout(() => { heart.remove(); }, 15000);
 }
-setInterval(createHeart, 600)
-const yesBtn = document.getElementById('yesBtn');
-const noBtn = document.getElementById('noBtn');
-const mainGif = document.getElementById('mainGif');
-const successScreen = document.getElementById('successScreen');
-const gifArea = document.querySelector('.gif-area');
+setInterval(createHeart, 600);
 
-
-mainGif.onload = () => {
-    if (mainGif.height > 0) {
-        gifArea.style.height = mainGif.height + 'px';
+// -------- MODES --------
+const modes = {
+    soft: {
+        gifs: [
+            "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
+            "https://media.giphy.com/media/l3vR85PnGsBwu1PFK/giphy.gif",
+            "https://media.giphy.com/media/OPU6wzx8JrHna/giphy.gif"
+        ],
+        text: [
+            "Are you sure BOLU? 🥺",
+            "Think about us 😭",
+            "My heart is fragile..."
+        ]
+    },
+    chaotic: {
+        gifs: [
+            "https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif",
+            "https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif",
+            "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif"
+        ],
+        text: [
+            "BOLU behave! 😭",
+            "Why are you like this??",
+            "This is wickedness 😂"
+        ]
+    },
+    toxic: {
+        gifs: [
+            "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif",
+            "https://media.giphy.com/media/3o6ZtaO9BZHcOjmErm/giphy.gif",
+            "https://media.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif"
+        ],
+        text: [
+            "BOLU no disgrace me 😤",
+            "Village people are watching 👀",
+            "So after everything?? 😭"
+        ]
     }
 };
 
-
-const gifs = [
-    "gif/smea-sony-music-africa.webp",
-    "gif/surprised-surprise.gif",
-    "gif/sad-eyes.gif",
-    "gif/cristiano-ronaldo-cristiano-ronaldo-meme.gif",
-    "gif/bruh.gif",
-    "gif/comighod.gif"
-];
-
-const guiltText = [
-    "you sure?",
-    "Really really sure?",
-    "Look at this face 🥺",
-    "Don't do this to me!",
-    "babe please!",
-    "You're breaking my heart!"
-];
-
 let step = 0;
-const totalClicks = guiltText.length; 
 
 noBtn.addEventListener('click', () => {
 
-    if (step < gifs.length) {
-        mainGif.src = gifs[step];
+    const selectedMode = modes[modeSelect.value];
+
+    if (step < selectedMode.gifs.length) {
+        mainGif.src = selectedMode.gifs[step];
     }
-    if (step < guiltText.length) {
-        noBtn.innerText = guiltText[step];
+
+    if (step < selectedMode.text.length) {
+        noBtn.innerText = selectedMode.text[step];
     }
 
-    
-    noBtn.style.backgroundColor = '#9400D3';
-    noBtn.style.color = '#ffffff';
-    noBtn.style.border = '2px solid #ffffff'; 
+    yesBtn.style.transform = `scale(${1 + step * 0.1})`;
 
-    
-    noBtn.style.setProperty('position', 'fixed', 'important');
-    noBtn.style.setProperty('z-index', '1000', 'important');
-
+    noBtn.style.position = "fixed";
+    noBtn.style.zIndex = "1000";
 
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
-    
-    if (step < totalClicks - 1) {
-        
-        const maxX = window.innerWidth - btnWidth - 20; 
-        const maxY = window.innerHeight - btnHeight - 20;
 
-        const randomX = Math.random() * maxX;
-        const randomY = Math.random() * maxY;
+    const maxX = window.innerWidth - btnWidth - 20;
+    const maxY = window.innerHeight - btnHeight - 20;
 
-        
-        noBtn.style.setProperty('left', Math.max(10, randomX) + 'px', 'important');
-        noBtn.style.setProperty('top', Math.max(10, randomY) + 'px', 'important');
-        
-    } else {
-        
-        const direction = Math.floor(Math.random() * 4);
-        
-        
-        switch(direction) {
-            case 0: 
-                noBtn.style.setProperty('top', (-btnHeight - 200) + 'px', 'important');
-                break;
-            case 1: 
-                noBtn.style.setProperty('top', (window.innerHeight + 200) + 'px', 'important');
-                break;
-            case 2: 
-                noBtn.style.setProperty('left', (-btnWidth - 200) + 'px', 'important');
-                break;
-            case 3: 
-                noBtn.style.setProperty('left', (window.innerWidth + 200) + 'px', 'important');
-                break;
-        }
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
 
-        
-        yesBtn.classList.add('yes-glow');
-        
-        
-        setTimeout(() => {
-            noBtn.style.display = 'none';
-        }, 300);
-    }
+    noBtn.style.left = Math.max(10, randomX) + 'px';
+    noBtn.style.top = Math.max(10, randomY) + 'px';
+
+    document.title = "BOLU don't break my heart 😭";
 
     step++;
 });
 
 yesBtn.addEventListener('click', () => {
+    successScreen.innerHTML = `
+        <img src="https://media.giphy.com/media/g9582DNuQppxC/giphy.gif" class="main-gif" style="max-height:200px;">
+        <div class="success-text">
+            Cheers BOLU! 🥂<br> You just made my year.
+        </div>
+        <p style="color:#888; margin-top:15px;">February 14th is ours ❤️</p>
+    `;
     successScreen.style.display = 'flex';
-
 });
